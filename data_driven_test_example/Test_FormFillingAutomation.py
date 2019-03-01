@@ -130,7 +130,7 @@ class TestRegistration(unittest.TestCase):
         driver.find_element_by_id("idade").click()
         Select(driver.find_element_by_id("idade")).select_by_value(idade_selecionada)
         lista_estados = Select(driver.find_element_by_id("cep_estado")).options
-        estado_selecionado = lista_estados[random.randrange(len(lista_estados))].text
+        estado_selecionado = lista_estados[random.randrange(1,len(lista_estados))].text
         driver.find_element_by_id("cep_estado").click()
         Select(driver.find_element_by_id("cep_estado")).select_by_value(estado_selecionado)
         driver.find_element_by_id("pontuacao_nao").click()

@@ -28,7 +28,7 @@ class TestRegistration(unittest.TestCase):
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
-        # self.quantity = 2
+        self.quantity = 2
 
     def test_fill_form(self):
         driver = self.driver
@@ -42,7 +42,7 @@ class TestRegistration(unittest.TestCase):
                     genero_selecionado = 'Male'
                 else:
                     genero_selecionado = 'FeMale'
-                lista_paises = Select(driver.find_element_by_id("countries")).options
+                lista_paises = Select(driver.find_element_by_id("countries123")).options
                 lista_paises2 = Select(driver.find_element_by_css_selector("select#country")).options
                 lista_hobbies = driver.find_elements_by_class_name("checks")
                 lista_skills = Select(driver.find_element_by_id("Skills")).options
@@ -113,7 +113,6 @@ class TestRegistration(unittest.TestCase):
                 WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
                 # self.assertEqual("Web Table", self.driver.title)     # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
             except WebDriverException as excecao:
-                resultado = excecao.__str__()
                 raise excecao
 
     def web_scraping(self):

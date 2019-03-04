@@ -28,7 +28,6 @@ class TestRegistration(unittest.TestCase):
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
-        self.quantity = 2
 
     def test_fill_form(self):
         driver = self.driver
@@ -42,10 +41,11 @@ class TestRegistration(unittest.TestCase):
                     genero_selecionado = 'Male'
                 else:
                     genero_selecionado = 'FeMale'
-                lista_paises = Select(driver.find_element_by_id("countries123")).options
+                lista_paises = Select(driver.find_element_by_id("countries")).options
                 lista_paises2 = Select(driver.find_element_by_css_selector("select#country")).options
                 lista_hobbies = driver.find_elements_by_class_name("checks")
                 lista_skills = Select(driver.find_element_by_id("Skills")).options
+                lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
                 pais_selecionado = lista_paises[random.randrange(len(lista_paises))].text
                 pais_selecionado2 = lista_paises2[random.randrange(1,len(lista_paises2))].text
                 hobbie_selecionado = lista_hobbies[random.randrange(len(lista_hobbies))].text
@@ -87,7 +87,6 @@ class TestRegistration(unittest.TestCase):
                 driver.find_element_by_xpath(f"//input[@type='radio' and @value= '{genero_selecionado}']").click()
                 driver.find_element_by_xpath(f"//input[@type='checkbox' and @value= '{hobbie_selecionado}']").click()
                 driver.find_element_by_id("msdd").click()
-                lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
                 for i in range(3):
                     idioma_selecionado = lista_idiomas[random.randrange(len(lista_idiomas))].text
                     driver.find_element_by_link_text(idioma_selecionado).click()
@@ -111,7 +110,8 @@ class TestRegistration(unittest.TestCase):
                 driver.find_element_by_id("secondpassword").send_keys(senha)
                 driver.find_element_by_id("submitbtn").click()
                 WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-                # self.assertEqual("Web Table", self.driver.title)     # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
+                if self.assertIsNot(self.driver.title, "Web Table"):     # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
+                    self.TestResult.addFailure()
             except WebDriverException as excecao:
                 raise excecao
 

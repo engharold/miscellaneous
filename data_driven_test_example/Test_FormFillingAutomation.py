@@ -109,9 +109,7 @@ class TestRegistration(unittest.TestCase):
                 driver.find_element_by_id("secondpassword").clear()
                 driver.find_element_by_id("secondpassword").send_keys(senha)
                 driver.find_element_by_id("submitbtn").click()
-                WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-                if self.assertIsNot(self.driver.title, "Web Table"):     # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
-                    self.TestResult.addFailure()
+                WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")) # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
             except WebDriverException as excecao:
                 raise excecao
 
@@ -147,10 +145,8 @@ class TestRegistration(unittest.TestCase):
         driver.find_element_by_tag_name("html").send_keys(Keys.PAGE_DOWN)
         WebDriverWait(driver, 5).until(Condition.element_to_be_clickable((By.ID, "nome")))
         dados_pessoa['Nome'] = driver.find_element_by_id('nome').text
-        dados_pessoa['CPF'] = driver.find_element_by_id("cpf").text
         dados_pessoa['Data Nascimento'] = driver.find_element_by_id("data_nasc").text
         dados_pessoa['Genero'] = genero_selecionado
-        dados_pessoa['CEP'] = driver.find_element_by_id("cep").text
         dados_pessoa['Endereço'] = driver.find_element_by_id("endereco").text
         dados_pessoa['Número'] = driver.find_element_by_id("numero").text
         dados_pessoa['Bairro'] = driver.find_element_by_id("bairro").text

@@ -133,12 +133,13 @@ class TestRegistration(unittest.TestCase):
         driver.find_element_by_id("pontuacao_nao").click()
         while True:
             driver.find_element_by_id("bt_gerar_pessoa").click()
+            # se algum dos campos a seguir estiver vazio, o script volta a clicar no botão "Gerar Pessoa"
             if not driver.find_element_by_id('nome').text or \
-                    not driver.find_element_by_id('data_nasc').text or \
-                    not driver.find_element_by_id('endereco').text or \
-                    not driver.find_element_by_id('email').text or \
-                    not driver.find_element_by_id('senha').text or \
-                    not driver.find_element_by_id('telefone_fixo').text:
+               not driver.find_element_by_id('data_nasc').text or \
+               not driver.find_element_by_id('endereco').text or \
+               not driver.find_element_by_id('email').text or \
+               not driver.find_element_by_id('senha').text or \
+               not driver.find_element_by_id('telefone_fixo').text:
                 continue
             break
 

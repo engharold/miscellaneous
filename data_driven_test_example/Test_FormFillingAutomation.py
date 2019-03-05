@@ -34,7 +34,8 @@ class TestRegistration(unittest.TestCase):
         for n in range(self.quantity):
             try:
                 dados_pessoa = self.web_scraping()
-                driver.switch_to.window(driver.window_handles[0])   # depois que o script coleta os dados na segunda aba, volta para a primeira
+                # depois que o script coleta os dados na segunda aba, volta para a primeira
+                driver.switch_to.window(driver.window_handles[0])
                 if n > 0:   # se é maior que 0 já fez o primeiro cadastro, e precisa clicar novamente na opção "Register"
                     driver.find_element_by_link_text("Register").click()
                 if dados_pessoa['Genero'] == 'H':
@@ -54,7 +55,9 @@ class TestRegistration(unittest.TestCase):
                 ano_nascimento = dados_pessoa['Data Nascimento'][6:]
                 mes_nascimento = data_nascimento.strftime('%B')
                 dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
-                senha = dados_pessoa["Senha"] + str(random.randint(1,10))   #adiciona um número à senha porque o site exige que tenha pelo menos um número
+                # adiciona um número à senha porque o site exige que tenha pelo menos um número, e às vezes o site 4devs
+                # gera uma senha que não tem nenhum número
+                senha = dados_pessoa["Senha"] + str(random.randint(1,10))
                 nome_dividido = dados_pessoa['Nome'].split()
                 nomes = nome_dividido[:-1]
                 # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
@@ -109,7 +112,8 @@ class TestRegistration(unittest.TestCase):
                 driver.find_element_by_id("secondpassword").clear()
                 driver.find_element_by_id("secondpassword").send_keys(senha)
                 driver.find_element_by_id("submitbtn").click()
-                WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")) # se o registro foi feito com sucesso o sistema muda para a página °Web Table°
+                # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
+                WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
             except WebDriverException as excecao:
                 raise excecao
 

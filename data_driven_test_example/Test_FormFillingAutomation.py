@@ -28,7 +28,7 @@ class TestRegistration(unittest.TestCase):
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
-
+        self.quantity = 1
     def test_fill_form(self):
         driver = self.driver
         for n in range(self.quantity):
@@ -108,12 +108,14 @@ class TestRegistration(unittest.TestCase):
                 Select(driver.find_element_by_id("daybox")).select_by_visible_text(dia_nascimento)
                 driver.find_element_by_id("firstpassword").click()
                 driver.find_element_by_id("firstpassword").clear()
-                driver.find_element_by_id("firstpassword").send_keys(senha)
+                driver.find_element_by_id("firstpassword").send_keys("1234567")
                 driver.find_element_by_id("secondpassword").clear()
-                driver.find_element_by_id("secondpassword").send_keys(senha)
+                driver.find_element_by_id("secondpassword").send_keys("1234567")
                 driver.find_element_by_id("submitbtn").click()
                 # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
-                WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
+                # self.resul = WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
+                resul = Condition.url_changes("http://demo.automationtesting.in/Register.html", "http://demo.automationtesting.in/WebTable.html")
+                #self.assertTrue(WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")))
             except WebDriverException as excecao:
                 raise excecao
 
@@ -165,9 +167,9 @@ class TestRegistration(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # se é menor que 2, não foi passado nenhum argumento da quantidade de cadastros a fazer
-        TestRegistration.quantity = 1
-    else:
-        TestRegistration.quantity = int(sys.argv.pop())  # tira o último item da lista e o move para a variável quantity
+    # if len(sys.argv) < 2:  # se é menor que 2, não foi passado nenhum argumento da quantidade de cadastros a fazer
+    #     TestRegistration.quantity = 1
+    # else:
+    #     TestRegistration.quantity = int(sys.argv.pop())  # tira o último item da lista e o move para a variável quantity
 
     unittest.main()

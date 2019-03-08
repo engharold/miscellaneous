@@ -29,7 +29,7 @@ class TestRegistration(unittest.TestCase):
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
-        self.quantity = 2
+        # self.quantity = 2
     def test_fill_form(self):
         driver = self.driver
         for n in range(self.quantity):
@@ -57,7 +57,11 @@ class TestRegistration(unittest.TestCase):
             dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
             # adiciona um número à senha porque o site exige que tenha pelo menos um número, e às vezes o site 4devs
             # gera uma senha que não tem nenhum número
-            senha = dados_pessoa["Senha"] + str(random.randint(1,10))
+            if n == 0:
+                senha = "1234567"
+            else:
+                senha = dados_pessoa["Senha"] + str(random.randint(1,10))
+
             nome_dividido = dados_pessoa['Nome'].split()
             nomes = nome_dividido[:-1]
             # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
@@ -108,17 +112,27 @@ class TestRegistration(unittest.TestCase):
             Select(driver.find_element_by_id("daybox")).select_by_visible_text(dia_nascimento)
             driver.find_element_by_id("firstpassword").click()
             driver.find_element_by_id("firstpassword").clear()
-            driver.find_element_by_id("firstpassword").send_keys("123")
+            driver.find_element_by_id("firstpassword").send_keys(senha)
             driver.find_element_by_id("secondpassword").clear()
-            driver.find_element_by_id("secondpassword").send_keys("123")
+            driver.find_element_by_id("secondpassword").send_keys(senha)
             driver.find_element_by_id("submitbtn").click()
             # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
             # self.resul = WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
             # resul = Condition.url_changes("http://demo.automationtesting.in/Register.html", "http://demo.automationtesting.in/WebTable.html")
             #self.assertTrue(WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")))
             # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-            time.sleep(7)
-            resul = self.assertEqual("Web Table", driver.title)
+            # time.sleep(7)
+            resultado = {}
+            with self.subTest():
+                time.sleep(5)
+                # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
+                if self.assertTrue("Web Table" == driver.title):
+                    resultado[primeiro_nome + " " + sobrenome] = "Passou"
+                else:
+                    resultado[primeiro_nome + " " + sobrenome] = "Falhou"
+
+            print(resultado)
+                # self.assertEqual("Web Table", driver.title)
             # if "Web Table" == driver.title:
             #     print("passou")
             # else:
@@ -172,9 +186,9 @@ class TestRegistration(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == "__main__":
-    # if len(sys.argv) < 2:  # se é menor que 2, não foi passado nenhum argumento da quantidade de cadastros a fazer
-    #     TestRegistration.quantity = 1
-    # else:
-    #     TestRegistration.quantity = int(sys.argv.pop())  # tira o último item da lista e o move para a variável quantity
+    if len(sys.argv) < 2:  # se é menor que 2, não foi passado nenhum argumento da quantidade de cadastros a fazer
+        TestRegistration.quantity = 1
+    else:
+        TestRegistration.quantity = int(sys.argv.pop())  # tira o último item da lista e o move para a variável quantity
 
     unittest.main()

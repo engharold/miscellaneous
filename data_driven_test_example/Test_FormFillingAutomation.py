@@ -32,6 +32,8 @@ class TestRegistration(unittest.TestCase):
         # self.quantity = 2
     def test_fill_form(self):
         driver = self.driver
+        self.resultado = {}
+        self.resultado[0] = "   Nome pessoa   " + "  Resultado esperado  " + "  Resultado obtido  "
         for n in range(self.quantity):
             dados_pessoa = self.web_scraping()
             # depois que o script coleta os dados na segunda aba, volta para a primeira
@@ -57,11 +59,6 @@ class TestRegistration(unittest.TestCase):
             dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
             # adiciona um número à senha porque o site exige que tenha pelo menos um número, e às vezes o site 4devs
             # gera uma senha que não tem nenhum número
-            if n == 0:
-                senha = "1234567"
-            else:
-                senha = dados_pessoa["Senha"] + str(random.randint(1,10))
-
             nome_dividido = dados_pessoa['Nome'].split()
             nomes = nome_dividido[:-1]
             # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
@@ -70,6 +67,12 @@ class TestRegistration(unittest.TestCase):
             else:
                 sobrenome = nome_dividido[-1]
             primeiro_nome = nomes[0]    # seleciona só o primeiro nome da lista
+            if n == 0:
+                senha = "1234567"
+                self.resultado[n+1] = [primeiro_nome + " " + sobrenome + " Falhar"]
+            else:
+                senha = dados_pessoa["Senha"] + str(random.randint(1,10))
+                self.resultado[n+1] = [primeiro_nome + " " + sobrenome + " Passar"]
             driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
             driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
             driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(primeiro_nome)
@@ -122,16 +125,21 @@ class TestRegistration(unittest.TestCase):
             #self.assertTrue(WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")))
             # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
             # time.sleep(7)
-            resultado = {}
-            with self.subTest():
-                time.sleep(5)
-                # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-                if self.assertTrue("Web Table" == driver.title):
-                    resultado[primeiro_nome + " " + sobrenome] = "Passou"
-                else:
-                    resultado[primeiro_nome + " " + sobrenome] = "Falhou"
+            time.sleep(4)
+            if "Web Table" == driver.title:
+                # self.resultado[primeiro_nome + " " + sobrenome] = "Passou"
+                self.resultado[n+1] = self.resultado[n+1] + " Passou"
+            else:
+                # self.resultado[primeiro_nome + " " + sobrenome] = "Falhou"
+                self.resultado[n+1] = self.resultado[n+1] + " Falhou"
+            # with self.subTest():
+            #     time.sleep(5)
+            #     # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
+            #     if self.assertTrue("Web Table" == driver.title):
+            #         resultado[primeiro_nome + " " + sobrenome] = "Passou"
+            #     else:
+            #         resultado[primeiro_nome + " " + sobrenome] = "Falhou"
 
-            print(resultado)
                 # self.assertEqual("Web Table", driver.title)
             # if "Web Table" == driver.title:
             #     print("passou")
@@ -142,7 +150,7 @@ class TestRegistration(unittest.TestCase):
         driver = self.driver
         driver.switch_to.window(driver.window_handles[1])
         dados_pessoa = {}
-        genero = ('H','M')
+        genero = ('H', 'M')
         genero_selecionado = random.choice(genero)
         WebDriverWait(driver, 10).until(Condition.element_to_be_clickable((By.LINK_TEXT, "Gerador de Pessoas")))
         driver.find_element_by_link_text("Gerador de Pessoas").click()
@@ -184,6 +192,9 @@ class TestRegistration(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+        for chave, valor in self.resultado.items():
+            print(str(chave) + valor)
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:  # se é menor que 2, não foi passado nenhum argumento da quantidade de cadastros a fazer

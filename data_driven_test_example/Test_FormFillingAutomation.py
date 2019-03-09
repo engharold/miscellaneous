@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #! python3
 
-# Este é um script de automação web que usa as estratégias data-driven testing e web scraping para gerar dinamicamente
+# Este é um script de automação web que usa os conceitos data-driven testing e web scraping para gerar dinamicamente
 # os dados de entrada, e interage com mais de uma aba no navegador de internet
 #
-# This is a web automation script that uses data-driven and web scraping stratagies to generate dynamically the input
-# data and interacts with more than one tab on the web browser
+# This is a web automation script that uses data-driven and web scraping concepts to generate dynamically the input
+# data, and interacts with more than one tab on the web browser
 
 __author__ = 'Harold Alvarez'
 
@@ -29,36 +29,36 @@ class TestRegistration(unittest.TestCase):
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
-        # self.quantity = 2
+
     def test_fill_form(self):
         driver = self.driver
         self.resultado = {}
-        self.resultado[0] = "   Nome pessoa   " + "  Resultado esperado  " + "  Resultado obtido  "
+        self.resultado[0] = "Nome pessoa            R. esperado   R. obtido"
         for n in range(self.quantity):
             dados_pessoa = self.web_scraping()
             # depois que o script coleta os dados na segunda aba, volta para a primeira
             driver.switch_to.window(driver.window_handles[0])
             if n > 0:   # se é maior que 0 já fez o primeiro cadastro, e precisa clicar novamente na opção "Register"
                 driver.find_element_by_link_text("Register").click()
+
             if dados_pessoa['Genero'] == 'H':
                 genero_selecionado = 'Male'
             else:
                 genero_selecionado = 'FeMale'
+
             lista_paises = Select(driver.find_element_by_id("countries")).options
             lista_paises2 = Select(driver.find_element_by_css_selector("select#country")).options
             lista_hobbies = driver.find_elements_by_class_name("checks")
             lista_skills = Select(driver.find_element_by_id("Skills")).options
             lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
-            pais_selecionado = lista_paises[random.randrange(len(lista_paises))].text
+            pais_selecionado = lista_paises[random.randrange(1,len(lista_paises))].text
             pais_selecionado2 = lista_paises2[random.randrange(1,len(lista_paises2))].text
             hobbie_selecionado = lista_hobbies[random.randrange(len(lista_hobbies))].text
-            habilidade_selecionada = lista_skills[random.randrange(len(lista_skills))].text
+            habilidade_selecionada = lista_skills[random.randrange(1,len(lista_skills))].text
             data_nascimento = datetime.strptime(dados_pessoa['Data Nascimento'],'%d/%m/%Y')
             ano_nascimento = dados_pessoa['Data Nascimento'][6:]
             mes_nascimento = data_nascimento.strftime('%B')
             dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
-            # adiciona um número à senha porque o site exige que tenha pelo menos um número, e às vezes o site 4devs
-            # gera uma senha que não tem nenhum número
             nome_dividido = dados_pessoa['Nome'].split()
             nomes = nome_dividido[:-1]
             # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
@@ -66,13 +66,16 @@ class TestRegistration(unittest.TestCase):
                 sobrenome = nomes[-1] + " " + nome_dividido[-1]
             else:
                 sobrenome = nome_dividido[-1]
+
             primeiro_nome = nomes[0]    # seleciona só o primeiro nome da lista
-            if n == 0:
-                senha = "1234567"
-                self.resultado[n+1] = [primeiro_nome + " " + sobrenome + " Falhar"]
+            nome_sobrenome = primeiro_nome + " " + sobrenome
+            if n % 2 == 0:  # Propositalmente todos os pares vão falhar porque a senha vai estar em branco
+                senha = ""
+                self.resultado[n+1] = nome_sobrenome.ljust(25) + "Falhar".ljust(14)
             else:
-                senha = dados_pessoa["Senha"] + str(random.randint(1,10))
-                self.resultado[n+1] = [primeiro_nome + " " + sobrenome + " Passar"]
+                senha = dados_pessoa["Senha"] + str(random.randint(1,10))   # coloca um número na senha, porque às vezes não tem
+                self.resultado[n+1] = nome_sobrenome.ljust(25) + "Passar".ljust(14)
+
             driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
             driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
             driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(primeiro_nome)
@@ -100,6 +103,7 @@ class TestRegistration(unittest.TestCase):
             for i in range(3):
                 idioma_selecionado = lista_idiomas[random.randrange(len(lista_idiomas))].text
                 driver.find_element_by_link_text(idioma_selecionado).click()
+
             driver.find_element_by_tag_name("body").click()
             driver.find_element_by_id("Skills").click()
             Select(driver.find_element_by_id("Skills")).select_by_value(habilidade_selecionada)
@@ -125,12 +129,10 @@ class TestRegistration(unittest.TestCase):
             #self.assertTrue(WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")))
             # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
             # time.sleep(7)
-            time.sleep(4)
+            time.sleep(5)
             if "Web Table" == driver.title:
-                # self.resultado[primeiro_nome + " " + sobrenome] = "Passou"
                 self.resultado[n+1] = self.resultado[n+1] + " Passou"
             else:
-                # self.resultado[primeiro_nome + " " + sobrenome] = "Falhou"
                 self.resultado[n+1] = self.resultado[n+1] + " Falhou"
             # with self.subTest():
             #     time.sleep(5)
@@ -146,6 +148,7 @@ class TestRegistration(unittest.TestCase):
             # else:
             #     print("falhou")
             #     unittest.TestCase.fail()
+
     def web_scraping(self):
         driver = self.driver
         driver.switch_to.window(driver.window_handles[1])
@@ -193,7 +196,7 @@ class TestRegistration(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
         for chave, valor in self.resultado.items():
-            print(str(chave) + valor)
+            print(self.resultado[chave])
 
 
 if __name__ == "__main__":

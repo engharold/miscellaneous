@@ -34,120 +34,105 @@ class TestRegistration(unittest.TestCase):
         driver = self.driver
         self.resultado = {}
         self.resultado[0] = "Nome pessoa            R. esperado   R. obtido"
-        for n in range(self.quantity):
-            dados_pessoa = self.web_scraping()
-            # depois que o script coleta os dados na segunda aba, volta para a primeira
-            driver.switch_to.window(driver.window_handles[0])
-            if n > 0:   # se é maior que 0 já fez o primeiro cadastro, e precisa clicar novamente na opção "Register"
-                driver.find_element_by_link_text("Register").click()
+        try:
+            for n in range(self.quantity):
+                dados_pessoa = self.web_scraping()
+                # depois que o script coleta os dados na segunda aba, volta para a primeira
+                driver.switch_to.window(driver.window_handles[0])
+                if n > 0:   # se é maior que 0 já fez o primeiro cadastro, e precisa clicar novamente na opção "Register"
+                    driver.find_element_by_link_text("Register").click()
 
-            if dados_pessoa['Genero'] == 'H':
-                genero_selecionado = 'Male'
-            else:
-                genero_selecionado = 'FeMale'
+                if dados_pessoa['Genero'] == 'H':
+                    genero_selecionado = 'Male'
+                else:
+                    genero_selecionado = 'FeMale'
 
-            lista_paises = Select(driver.find_element_by_id("countries")).options
-            lista_paises2 = Select(driver.find_element_by_css_selector("select#country")).options
-            lista_hobbies = driver.find_elements_by_class_name("checks")
-            lista_skills = Select(driver.find_element_by_id("Skills")).options
-            lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
-            pais_selecionado = lista_paises[random.randrange(1,len(lista_paises))].text
-            pais_selecionado2 = lista_paises2[random.randrange(1,len(lista_paises2))].text
-            hobbie_selecionado = lista_hobbies[random.randrange(len(lista_hobbies))].text
-            habilidade_selecionada = lista_skills[random.randrange(1,len(lista_skills))].text
-            data_nascimento = datetime.strptime(dados_pessoa['Data Nascimento'],'%d/%m/%Y')
-            ano_nascimento = dados_pessoa['Data Nascimento'][6:]
-            mes_nascimento = data_nascimento.strftime('%B')
-            dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
-            nome_dividido = dados_pessoa['Nome'].split()
-            nomes = nome_dividido[:-1]
-            # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
-            if nomes[-1] == "da" or nomes[-1] == "do" or nomes[-1] == "das" or nomes[-1] == "dos" or nomes[-1] == "de":
-                sobrenome = nomes[-1] + " " + nome_dividido[-1]
-            else:
-                sobrenome = nome_dividido[-1]
+                lista_paises = Select(driver.find_element_by_id("countries")).options
+                lista_paises2 = Select(driver.find_element_by_css_selector("select#country")).options
+                lista_hobbies = driver.find_elements_by_class_name("checks")
+                lista_skills = Select(driver.find_element_by_id("Skills")).options
+                lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
+                pais_selecionado = lista_paises[random.randrange(1,len(lista_paises))].text
+                pais_selecionado2 = lista_paises2[random.randrange(1,len(lista_paises2))].text
+                hobbie_selecionado = lista_hobbies[random.randrange(len(lista_hobbies))].text
+                habilidade_selecionada = lista_skills[random.randrange(1,len(lista_skills))].text
+                data_nascimento = datetime.strptime(dados_pessoa['Data Nascimento'],'%d/%m/%Y')
+                ano_nascimento = dados_pessoa['Data Nascimento'][6:]
+                mes_nascimento = data_nascimento.strftime('%B')
+                dia_nascimento = str(int(dados_pessoa['Data Nascimento'][0:2]))     #tira o zero à esquerda, se houver
+                nome_dividido = dados_pessoa['Nome'].split()
+                nomes = nome_dividido[:-1]
+                # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
+                if nomes[-1] == "da" or nomes[-1] == "do" or nomes[-1] == "das" or nomes[-1] == "dos" or nomes[-1] == "de":
+                    sobrenome = nomes[-1] + " " + nome_dividido[-1]
+                else:
+                    sobrenome = nome_dividido[-1]
 
-            primeiro_nome = nomes[0]    # seleciona só o primeiro nome da lista
-            nome_sobrenome = primeiro_nome + " " + sobrenome
-            if n % 2 == 0:  # Propositalmente todos os pares vão falhar porque a senha vai estar em branco
-                senha = ""
-                self.resultado[n+1] = nome_sobrenome.ljust(25) + "Falhar".ljust(14)
-            else:
-                senha = dados_pessoa["Senha"] + str(random.randint(1,10))   # coloca um número na senha, porque às vezes não tem
-                self.resultado[n+1] = nome_sobrenome.ljust(25) + "Passar".ljust(14)
+                primeiro_nome = nomes[0]    # seleciona só o primeiro nome da lista
+                nome_sobrenome = primeiro_nome + " " + sobrenome
+                if n % 2 == 0:  # Propositalmente todos os pares vão falhar porque a senha vai estar em branco
+                    senha = ""
+                    self.resultado[n+1] = nome_sobrenome.ljust(25) + "Falhar".ljust(14)
+                else:
+                    senha = dados_pessoa["Senha"] + str(random.randint(1,10))   # coloca um número na senha, porque às vezes não tem
+                    self.resultado[n+1] = nome_sobrenome.ljust(25) + "Passar".ljust(14)
 
-            driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
-            driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
-            driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(primeiro_nome)
-            driver.find_element_by_xpath("//input[@placeholder='Last Name']").click()
-            driver.find_element_by_xpath("//input[@placeholder='Last Name']").clear()
-            driver.find_element_by_xpath("//input[@placeholder='Last Name']").send_keys(sobrenome)
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").click()
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").clear()
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Endereço'])
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Número'])
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Bairro'])
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
-            driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Cidade'])
-            driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").click()
-            driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").clear()
-            driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").send_keys(dados_pessoa['Email'])
-            driver.find_element_by_xpath("//*[@ng-model='Phone']").click()
-            driver.find_element_by_xpath("//*[@ng-model='Phone']").clear()
-            driver.find_element_by_xpath("//*[@ng-model='Phone']").send_keys(dados_pessoa['Telefone'])
-            driver.find_element_by_xpath(f"//input[@type='radio' and @value= '{genero_selecionado}']").click()
-            driver.find_element_by_xpath(f"//input[@type='checkbox' and @value= '{hobbie_selecionado}']").click()
-            driver.find_element_by_id("msdd").click()
-            for i in range(3):
-                idioma_selecionado = lista_idiomas[random.randrange(len(lista_idiomas))].text
-                driver.find_element_by_link_text(idioma_selecionado).click()
+                driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
+                driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
+                driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(primeiro_nome)
+                driver.find_element_by_xpath("//input[@placeholder='Last Name']").click()
+                driver.find_element_by_xpath("//input[@placeholder='Last Name']").clear()
+                driver.find_element_by_xpath("//input[@placeholder='Last Name']").send_keys(sobrenome)
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").click()
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").clear()
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Endereço'])
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Número'])
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Bairro'])
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(Keys.ENTER)
+                driver.find_element_by_xpath("//*[@ng-model='Adress']").send_keys(dados_pessoa['Cidade'])
+                driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").click()
+                driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").clear()
+                driver.find_element_by_xpath("//*[@ng-model='EmailAdress']").send_keys(dados_pessoa['Email'])
+                driver.find_element_by_xpath("//*[@ng-model='Phone']").click()
+                driver.find_element_by_xpath("//*[@ng-model='Phone']").clear()
+                driver.find_element_by_xpath("//*[@ng-model='Phone']").send_keys(dados_pessoa['Telefone'])
+                driver.find_element_by_xpath(f"//input[@type='radio' and @value= '{genero_selecionado}']").click()
+                driver.find_element_by_xpath(f"//input[@type='checkbox' and @value= '{hobbie_selecionado}']").click()
+                driver.find_element_by_id("msdd").click()
+                for i in range(3):
+                    idioma_selecionado = lista_idiomas[random.randrange(len(lista_idiomas))].text
+                    driver.find_element_by_link_text(idioma_selecionado).click()
 
-            driver.find_element_by_tag_name("body").click()
-            driver.find_element_by_id("Skills").click()
-            Select(driver.find_element_by_id("Skills")).select_by_value(habilidade_selecionada)
-            driver.find_element_by_id("countries").click()
-            Select(driver.find_element_by_id("countries")).select_by_visible_text(pais_selecionado)
-            driver.find_element_by_css_selector("span.select2-selection__arrow").click()
-            Select(driver.find_element_by_css_selector("select#country")).select_by_value(pais_selecionado2)
-            driver.find_element_by_id("yearbox").click()
-            Select(driver.find_element_by_id("yearbox")).select_by_visible_text(ano_nascimento)
-            driver.find_element_by_xpath("//*[@ng-model='monthbox']").click()
-            Select(driver.find_element_by_xpath("//*[@ng-model='monthbox']")).select_by_visible_text(mes_nascimento)
-            driver.find_element_by_id("daybox").click()
-            Select(driver.find_element_by_id("daybox")).select_by_visible_text(dia_nascimento)
-            driver.find_element_by_id("firstpassword").click()
-            driver.find_element_by_id("firstpassword").clear()
-            driver.find_element_by_id("firstpassword").send_keys(senha)
-            driver.find_element_by_id("secondpassword").clear()
-            driver.find_element_by_id("secondpassword").send_keys(senha)
-            driver.find_element_by_id("submitbtn").click()
-            # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
-            # self.resul = WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-            # resul = Condition.url_changes("http://demo.automationtesting.in/Register.html", "http://demo.automationtesting.in/WebTable.html")
-            #self.assertTrue(WebDriverWait(driver, 7).until(Condition.url_contains("WebTable")))
-            # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-            # time.sleep(7)
-            time.sleep(5)
-            if "Web Table" == driver.title:
-                self.resultado[n+1] = self.resultado[n+1] + " Passou"
-            else:
-                self.resultado[n+1] = self.resultado[n+1] + " Falhou"
-            # with self.subTest():
-            #     time.sleep(5)
-            #     # WebDriverWait(driver, 7).until(Condition.url_contains("WebTable"))
-            #     if self.assertTrue("Web Table" == driver.title):
-            #         resultado[primeiro_nome + " " + sobrenome] = "Passou"
-            #     else:
-            #         resultado[primeiro_nome + " " + sobrenome] = "Falhou"
+                driver.find_element_by_tag_name("body").click()
+                driver.find_element_by_id("Skills").click()
+                Select(driver.find_element_by_id("Skills")).select_by_value(habilidade_selecionada)
+                driver.find_element_by_id("countries").click()
+                Select(driver.find_element_by_id("countries")).select_by_visible_text(pais_selecionado)
+                driver.find_element_by_css_selector("span.select2-selection__arrow").click()
+                Select(driver.find_element_by_css_selector("select#country")).select_by_value(pais_selecionado2)
+                driver.find_element_by_id("yearbox").click()
+                Select(driver.find_element_by_id("yearbox")).select_by_visible_text(ano_nascimento)
+                driver.find_element_by_xpath("//*[@ng-model='monthbox']").click()
+                Select(driver.find_element_by_xpath("//*[@ng-model='monthbox']")).select_by_visible_text(mes_nascimento)
+                driver.find_element_by_id("daybox").click()
+                Select(driver.find_element_by_id("daybox")).select_by_visible_text(dia_nascimento)
+                driver.find_element_by_id("firstpassword").click()
+                driver.find_element_by_id("firstpassword").clear()
+                driver.find_element_by_id("firstpassword").send_keys(senha)
+                driver.find_element_by_id("secondpassword").clear()
+                driver.find_element_by_id("secondpassword").send_keys(senha)
+                driver.find_element_by_id("submitbtn").click()
+                # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
+                time.sleep(5)
+                if "Web Table" == driver.title:
+                    self.resultado[n+1] = self.resultado[n+1] + " Passou"
+                else:
+                    self.resultado[n+1] = self.resultado[n+1] + " Falhou"
 
-                # self.assertEqual("Web Table", driver.title)
-            # if "Web Table" == driver.title:
-            #     print("passou")
-            # else:
-            #     print("falhou")
-            #     unittest.TestCase.fail()
+        except WebDriverException as excecao:
+            raise excecao
 
     def web_scraping(self):
         driver = self.driver

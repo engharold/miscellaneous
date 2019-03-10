@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
 #! python3
+#
+# Este é um script simples que aplica a automação web e desktop simultaeamente
+#
+# This is a simple script that applies simultaneously the web and desktop automation
+
+__author__ = 'Harold Alvarez'
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -24,7 +32,7 @@ class TestAutomation(unittest.TestCase):
         keyboard.send("win+r")
         r.wait(lackey.Pattern('janela_executar.png'), 30)   # espera até 30 segundos para localizar a imagem na tela
         r.click(lackey.Pattern('janela_executar.png'))
-        keyboard.send("ctrl+a")     # seleciona tudo o que estiver escrito na caixa de texto de executar
+        keyboard.send("ctrl+a")     # seleciona tudo o que estiver escrito na caixa de texto na janela de execução
         keyboard.send("del")    # apaga o que foi selecionado
         keyboard.write("wordpad")
         r.click('btn_ok.png')
@@ -43,6 +51,7 @@ class TestAutomation(unittest.TestCase):
         r.click("opcao_arquivo.png")
         r.wait(lackey.Pattern("opcao_sair.png"), 30)
         r.click("opcao_sair.png")
+
     def collect_data(self):
         driver = self.driver
         dados_pessoa = {}

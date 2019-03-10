@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #! python3
-
+#
 # Este é um script de automação web que usa os conceitos data-driven testing e web scraping para gerar dinamicamente
 # os dados de entrada, e interage com mais de uma aba no navegador de internet
 #

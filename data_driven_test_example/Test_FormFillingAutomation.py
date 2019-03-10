@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 #! python3
 #
-# Este é um script de automação web que usa os conceitos data-driven testing e web scraping para gerar dinamicamente
+# Este é um script de teste automatizado de web usa os conceitos data-driven testing e web scraping para gerar dinamicamente
 # os dados de entrada, e interage com mais de uma aba no navegador de internet
 #
-# This is a web automation script that uses data-driven and web scraping concepts to generate dynamically the input
+# This is a web automated test script that uses data-driven and web scraping concepts to generate dynamically the input
 # data, and interacts with more than one tab on the web browser
 
 __author__ = 'Harold Alvarez'
@@ -32,8 +32,7 @@ class TestRegistration(unittest.TestCase):
 
     def test_fill_registration_form(self):
         driver = self.driver
-        self.resultado = {}
-        self.resultado[0] = "Nome pessoa                        R. esperado   R. obtido"
+        self.resultado = {0: "Nome pessoa                              R. esperado   R. obtido"}
         try:
             for n in range(self.quantity):
                 dados_pessoa = self.web_scraping()
@@ -76,10 +75,10 @@ class TestRegistration(unittest.TestCase):
                 # Se o número é par, o cadastro deve dar sucesso, caso contrário o cadastro falha
                 if n % 2 == 0:
                     senha = dados_pessoa["Senha"] + str(random.randint(1,10))   # coloca um número na senha, porque às vezes não tem
-                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(35) + "Passar".ljust(14)
+                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(41) + "Passar".ljust(14)
                 else:
                     senha = ""  # senha em branco propositalmente, para o cadastro falhar
-                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(35) + "Falhar".ljust(14)
+                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(41) + "Falhar".ljust(14)
 
                 driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
                 driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
@@ -128,12 +127,12 @@ class TestRegistration(unittest.TestCase):
                 driver.find_element_by_id("secondpassword").clear()
                 driver.find_element_by_id("secondpassword").send_keys(senha)
                 driver.find_element_by_id("submitbtn").click()
-                # se o registro foi feito com sucesso o sistema redireciona o usuário para a página °Web Table°
+                # se o registro foi feito com sucesso, o sistema redireciona o usuário para a página °Web Table°
                 time.sleep(5)
                 if "Web Table" == driver.title:
-                    self.resultado[n+1] = self.resultado[n+1] + " Passou"
+                    self.resultado[n+1] = self.resultado[n+1] + "Passou"
                 else:
-                    self.resultado[n+1] = self.resultado[n+1] + " Falhou"
+                    self.resultado[n+1] = self.resultado[n+1] + "Falhou"
 
         except WebDriverException as excecao:
             raise excecao

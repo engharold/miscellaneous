@@ -30,10 +30,10 @@ class TestRegistration(unittest.TestCase):
         self.driver.implicitly_wait(10)
         self.driver.execute_script("window.open('https://www.4devs.com.br/');")
 
-    def test_fill_form(self):
+    def test_fill_registration_form(self):
         driver = self.driver
         self.resultado = {}
-        self.resultado[0] = "Nome pessoa            R. esperado   R. obtido"
+        self.resultado[0] = "Nome pessoa                        R. esperado   R. obtido"
         try:
             for n in range(self.quantity):
                 dados_pessoa = self.web_scraping()
@@ -52,6 +52,7 @@ class TestRegistration(unittest.TestCase):
                 lista_hobbies = driver.find_elements_by_class_name("checks")
                 lista_skills = Select(driver.find_element_by_id("Skills")).options
                 lista_idiomas = driver.find_elements_by_css_selector("a.ui-corner-all")
+                # começa na posição 1 porque a posição 0 tem o valor inválido "Select Country"
                 pais_selecionado = lista_paises[random.randrange(1,len(lista_paises))].text
                 pais_selecionado2 = lista_paises2[random.randrange(1,len(lista_paises2))].text
                 hobbie_selecionado = lista_hobbies[random.randrange(len(lista_hobbies))].text
@@ -64,22 +65,25 @@ class TestRegistration(unittest.TestCase):
                 nomes = nome_dividido[:-1]
                 # verifica se o último nome da lista é parte de um sobrenome. Exemplo: da Silva, de Oliveira, etc.
                 if nomes[-1] == "da" or nomes[-1] == "do" or nomes[-1] == "das" or nomes[-1] == "dos" or nomes[-1] == "de":
-                    sobrenome = nomes[-1] + " " + nome_dividido[-1]
+                    sobrenome = nomes.pop() + " " + nome_dividido[-1]
                 else:
                     sobrenome = nome_dividido[-1]
 
-                primeiro_nome = nomes[0]    # seleciona só o primeiro nome da lista
-                nome_sobrenome = primeiro_nome + " " + sobrenome
-                if n % 2 == 0:  # Propositalmente todos os pares vão falhar porque a senha vai estar em branco
-                    senha = ""
-                    self.resultado[n+1] = nome_sobrenome.ljust(25) + "Falhar".ljust(14)
-                else:
+                nome_formatado = ""
+                for i in range(len(nomes)):
+                    nome_formatado = nome_formatado + " " + nomes[i]
+
+                # Se o número é par, o cadastro deve dar sucesso, caso contrário o cadastro falha
+                if n % 2 == 0:
                     senha = dados_pessoa["Senha"] + str(random.randint(1,10))   # coloca um número na senha, porque às vezes não tem
-                    self.resultado[n+1] = nome_sobrenome.ljust(25) + "Passar".ljust(14)
+                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(35) + "Passar".ljust(14)
+                else:
+                    senha = ""  # senha em branco propositalmente, para o cadastro falhar
+                    self.resultado[n+1] = dados_pessoa["Nome"].ljust(35) + "Falhar".ljust(14)
 
                 driver.find_element_by_xpath("//input[@placeholder='First Name']").click()
                 driver.find_element_by_xpath("//input[@placeholder='First Name']").clear()
-                driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(primeiro_nome)
+                driver.find_element_by_xpath("//input[@placeholder='First Name']").send_keys(nome_formatado)
                 driver.find_element_by_xpath("//input[@placeholder='Last Name']").click()
                 driver.find_element_by_xpath("//input[@placeholder='Last Name']").clear()
                 driver.find_element_by_xpath("//input[@placeholder='Last Name']").send_keys(sobrenome)

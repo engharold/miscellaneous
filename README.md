@@ -1,6 +1,6 @@
-Português: Este repositório tem vários exemplos de automação de testes de software, onde são aplicadas algumas estratégias/ferramentas para o teste de aplicações.
+Português: Este repositório tem vários exemplos de testes automatizados de software, onde são usadas algumas estratégias/ferramentas para o teste das aplicações.
 
-English: This repository has several software testing automation examples, where some strategies/tools are applied to application testing.
+English: This repository has several software automated testing examples, where some strategies/tools are used to application testing.
 
-Español: Este repositorio tiene varios ejemplos de automatización de pruebas de software, donde son aplicadas algunas estrategias/herra-
-mientas para las pruebas de aplicaciones.
+Español: Este repositorio tiene varios ejemplos de pruebas automatizadas de software, donde son usadas algunas estrategias/herra-
+mientas para las pruebas de las aplicaciones.

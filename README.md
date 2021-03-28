@@ -2,5 +2,4 @@ Português: Este repositório tem vários exemplos de testes automatizados de so
 
 English: This repository has several software automated testing examples, where some strategies/tools are used to application testing.
 
-Español: Este repositorio tiene varios ejemplos de pruebas automatizadas de software, donde son usadas algunas estrategias/herra-
-mientas para las pruebas de las aplicaciones.
+Español: Este repositorio tiene varios ejemplos de pruebas automatizadas de software, donde son usadas algunas estrategias/herramientas para las pruebas de las aplicaciones.

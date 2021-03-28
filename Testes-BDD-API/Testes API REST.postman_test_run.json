@@ -1,0 +1,106 @@
+{
+	"id": "27ac5221-2b92-4269-bd3e-303cb9678f16",
+	"name": "Testes API REST",
+	"timestamp": "2021-03-28T03:54:41.057Z",
+	"collection_id": "5bff0500-16fc-42b9-80f7-4db7249a53b0",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "f01bb4ad-48a9-4ee7-b6f3-da1452a82407",
+			"name": "Criar publicação",
+			"url": "https://jsonplaceholder.typicode.com/posts",
+			"time": 307,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				307
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "5fe6c11f-60ad-4c6c-bf46-f59e8fc1bad4",
+			"name": "Ler publicação",
+			"url": "https://jsonplaceholder.typicode.com/posts/1",
+			"time": 294,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				294
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "f1fe47dd-2085-4b5b-b79b-ee2c3c272653",
+			"name": "Atualizar publicação",
+			"url": "https://jsonplaceholder.typicode.com/posts/1",
+			"time": 288,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				288
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "1b5d965e-ec33-469e-a503-e85b5a6eb525",
+			"name": "Apagar publicação",
+			"url": "https://jsonplaceholder.typicode.com/posts/1",
+			"time": 304,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				304
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1193,
+	"collection": {
+		"requests": [
+			{
+				"id": "f01bb4ad-48a9-4ee7-b6f3-da1452a82407",
+				"method": "POST"
+			},
+			{
+				"id": "5fe6c11f-60ad-4c6c-bf46-f59e8fc1bad4",
+				"method": "GET"
+			},
+			{
+				"id": "f1fe47dd-2085-4b5b-b79b-ee2c3c272653",
+				"method": "PUT"
+			},
+			{
+				"id": "1b5d965e-ec33-469e-a503-e85b5a6eb525",
+				"method": "DELETE"
+			}
+		]
+	}
+}

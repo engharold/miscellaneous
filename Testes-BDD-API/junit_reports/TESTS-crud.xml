@@ -1,0 +1,78 @@
+<testsuite name="crud.Cadastro de publicações no sistema" tests="4" errors="0" failures="0" skipped="0" time="1.243244" timestamp="2021-03-28T00:19:09.257861" hostname="DESKTOP-SQSJC7S"><testcase classname="crud.Cadastro de publicações no sistema" name="Criar uma publicação" status="passed" time="0.410281"><system-out>
+<![CDATA[
+@scenario.begin
+  Cenário: Criar uma publicação
+    Dado que a URL da API é "https://jsonplaceholder.typicode.com/posts/" ... passed in 0.016s
+    E defino o parâmetro Content Type do cabeçalho como "application/json" ... passed in 0.000s
+    E defino o parâmetro Accept do cabeçalho como "application/json" ... passed in 0.000s
+    Quando defino a "<coluna>" e o "<valor>" como segue ... passed in 0.000s
+      | coluna | valor               |
+      | title  | título teste        |
+      | body   | conteúdo publicação |
+      | userId | 1                   |
+    E faço a requisição "POST" ... passed in 0.395s
+    Então o código da resposta deve ser "201" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+REQUEST BODY:
+{'title': 'título teste', 'body': 'conteúdo publicação', 'userId': '1'}
+
+]]>
+</system-out></testcase><testcase classname="crud.Cadastro de publicações no sistema" name="Ler uma publicação" status="passed" time="0.080616"><system-out>
+<![CDATA[
+@scenario.begin
+  Cenário: Ler uma publicação
+    Dado que a URL da API é "https://jsonplaceholder.typicode.com/posts/" ... passed in 0.000s
+    E defino o parâmetro Content Type do cabeçalho como "application/json" ... passed in 0.000s
+    E defino o parâmetro Accept do cabeçalho como "application/json" ... passed in 0.000s
+    Quando informo que o ID da publicação que quero ler é o "1" ... passed in 0.000s
+    E faço a requisição "GET" ... passed in 0.080s
+    Então o código da resposta deve ser "200" ... passed in 0.001s
+    E o conteúdo do BODY não deve estar vazio ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="crud.Cadastro de publicações no sistema" name="Atualizar uma publicação" status="passed" time="0.360313"><system-out>
+<![CDATA[
+@scenario.begin
+  Cenário: Atualizar uma publicação
+    Dado que a URL da API é "https://jsonplaceholder.typicode.com/posts/" ... passed in 0.001s
+    E defino o parâmetro Content Type do cabeçalho como "application/json" ... passed in 0.000s
+    E defino o parâmetro Accept do cabeçalho como "application/json" ... passed in 0.000s
+    Quando defino a "<coluna>" e o "<valor>" como segue ... passed in 0.000s
+      | coluna | valor                          |
+      | id     | 1                              |
+      | title  | título atualizado              |
+      | body   | conteúdo publicação atualizado |
+      | userId | 1                              |
+    E faço a requisição "PUT" ... passed in 0.359s
+    Então o código da resposta deve ser "200" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+REQUEST BODY:
+{'title': 'título atualizado', 'body': 'conteúdo publicação atualizado', 'userId': '1', 'id': '1'}
+
+]]>
+</system-out></testcase><testcase classname="crud.Cadastro de publicações no sistema" name="Apagar uma publicação" status="passed" time="0.392033"><system-out>
+<![CDATA[
+@scenario.begin
+  Cenário: Apagar uma publicação
+    Dado que a URL da API é "https://jsonplaceholder.typicode.com/posts/" ... passed in 0.000s
+    E defino o parâmetro Content Type do cabeçalho como "application/json" ... passed in 0.000s
+    E defino o parâmetro Accept do cabeçalho como "application/json" ... passed in 0.000s
+    Quando informo que o ID da publicação que quero apagar é o "1" ... passed in 0.000s
+    E faço a requisição "DELETE" ... passed in 0.392s
+    Então o código da resposta deve ser "200" ... passed in 0.000s
+    E o conteúdo do BODY deve estar vazio ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>
